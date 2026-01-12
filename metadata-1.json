@@ -1,0 +1,5 @@
+{
+  "name": "NurseRoster",
+  "description": "A comprehensive nursing shift management dashboard allowing manual roster creation and automated schedule generation.",
+  "requestFramePermissions": []
+}
