@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Employee, ShiftType } from '../types';
+import { Employee, ShiftType } from './types';
 import ShiftCell from './ShiftCell';
 import { Trash2, User, GripVertical } from 'lucide-react';
 
