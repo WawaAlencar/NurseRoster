@@ -1,8 +1,8 @@
 
 import { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, TextRun, AlignmentType, BorderStyle, VerticalAlign, HeadingLevel, PageBreak, PageOrientation, VerticalMergeType, HeightRule, ImageRun } from "docx";
 import { saveAs } from "file-saver";
-import { Employee, EmployeeCategory } from "../types";
-import { MONTH_NAMES, DEFAULT_LAYOUT_CONFIG } from "../constants";
+import { Employee, EmployeeCategory } from "./types";
+import { MONTH_NAMES, DEFAULT_LAYOUT_CONFIG } from "./constants";
 
 // Configurações de estilo
 const FONT_FAMILY = "Arial";
