@@ -1,6 +1,6 @@
 import React from 'react';
-import { ShiftType } from '../types';
-import { SHIFT_COLORS } from '../constants';
+import { ShiftType } from './types';
+import { SHIFT_COLORS } from './constants';
 
 interface ShiftCellProps {
   day: number;
