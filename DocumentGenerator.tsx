@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Employee, ShiftType, EmployeeCategory } from './types';
 import { AVAILABLE_TEMPLATES, DEFAULT_LAYOUT_CONFIG } from './constants';
 import { Printer, RotateCcw, Save, FileText, Download, FileType, Settings, PenTool, LayoutTemplate, ChevronDown, ChevronUp, Type, Palette, Ruler } from 'lucide-react';
-import { generateDocx } from './utils/docxGenerator';
+import { generateDocx } from './docxGenerator';
 
 interface DocumentGeneratorProps {
   employees: Employee[];
