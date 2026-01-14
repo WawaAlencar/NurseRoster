@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Employee, ShiftType, EmployeeCategory } from './types';
 import { AVAILABLE_TEMPLATES, DEFAULT_LAYOUT_CONFIG } from './constants';
 import { Printer, RotateCcw, Save, FileText, Download, FileType, Settings, PenTool, LayoutTemplate, ChevronDown, ChevronUp, Type, Palette, Ruler } from 'lucide-react';
-import { generateDocx } from './docxGenerator';
+import { generateDocx } from './utils/docxGenerator';
 
 interface DocumentGeneratorProps {
   employees: Employee[];
@@ -16,6 +16,7 @@ interface DocumentGeneratorProps {
 interface LayoutConfig {
     // Textos
     titleReport: string;
+    customSectorName: string; // Novo Campo
     col6Name: string;
     col7Name: string;
     
@@ -194,7 +195,14 @@ const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({ employees, month,
     content = content.replace(/{{TITULO_DOC}}/g, layoutConfig.titleReport);
     content = content.replace(/{{NOME_COLUNA_6}}/g, layoutConfig.col6Name);
     content = content.replace(/{{NOME_COLUNA_7}}/g, layoutConfig.col7Name);
-    content = content.replace(/{{NOME_SETOR}}/g, AVAILABLE_TEMPLATES[selectedTemplateKey].name);
+    
+    // Set Sector Name: Use custom name for Standard template, otherwise fixed template name
+    const actualSectorName = (selectedTemplateKey === 'standard') 
+        ? layoutConfig.customSectorName.toUpperCase() 
+        : AVAILABLE_TEMPLATES[selectedTemplateKey].name;
+    
+    content = content.replace(/{{NOME_SETOR}}/g, actualSectorName);
+    
     content = content.replace(/{{TAM_FONTE_TITULO}}/g, layoutConfig.fontSizeTitle.toString());
     content = content.replace(/{{TAM_FONTE_TABELA}}/g, layoutConfig.fontSizeTable.toString());
     content = content.replace(/{{COR_CAB_MANHA}}/g, layoutConfig.colorMorningHeader);
@@ -381,6 +389,7 @@ const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({ employees, month,
                         
                         {selectedTemplateKey === 'standard' && (
                           <div className="space-y-2 pt-2 border-t border-gray-100">
+                             <div><label className="block text-[10px] font-bold text-indigo-600 mb-1">Nome do Setor</label><input value={layoutConfig.customSectorName} onChange={(e) => setLayoutConfig(prev => ({...prev, customSectorName: e.target.value.toUpperCase()}))} className="w-full border border-gray-300 rounded p-1.5 text-xs outline-none bg-white text-gray-900" /></div>
                              <div><label className="block text-[10px] font-bold text-indigo-600 mb-1">Nome Coluna 6</label><input value={layoutConfig.col6Name} onChange={(e) => setLayoutConfig(prev => ({...prev, col6Name: e.target.value.toUpperCase()}))} className="w-full border border-gray-300 rounded p-1.5 text-xs outline-none bg-white text-gray-900" /></div>
                              <div><label className="block text-[10px] font-bold text-indigo-600 mb-1">Nome Coluna 7</label><input value={layoutConfig.col7Name} onChange={(e) => setLayoutConfig(prev => ({...prev, col7Name: e.target.value.toUpperCase()}))} className="w-full border border-gray-300 rounded p-1.5 text-xs outline-none bg-white text-gray-900" /></div>
                           </div>
