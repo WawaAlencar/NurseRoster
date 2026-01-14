@@ -749,6 +749,12 @@ export const generateDocx = async (employees: Employee[], month: number, year: n
   
   const titleText = config?.titleReport || "DISTRIBUIÇÃO DIÁRIA DAS ATIVIDADES DE ENFERMAGEM";
 
+  // Determine display name for Sector (Used in Header and Filename)
+  // If sectorName is "Padrão" and user provided custom name, use that. Otherwise use sectorName.
+  const displaySectorName = (sectorName === "Padrão" && config?.customSectorName) 
+    ? config.customSectorName.toUpperCase() 
+    : sectorName;
+
   // --- COLUMN WIDTH CALCULATION ---
   // Fallback default config if not provided
   const c = config || DEFAULT_LAYOUT_CONFIG;
@@ -781,6 +787,7 @@ export const generateDocx = async (employees: Employee[], month: number, year: n
   // Determine if we are using a compact layout (Single Page like UCINCO/UCINCA)
   const isCompact = ["UCINCO", "UCINCA"].includes(sectorName);
   const isUCA = ["UCA"].includes(sectorName);
+  // Note: We check against the original 'sectorName' (template key/name) for logic structure
   const isMultiPageNovo = ["UTI NEO", "Padrão"].includes(sectorName);
   
   // No logo fetching for any template
@@ -821,13 +828,15 @@ export const generateDocx = async (employees: Employee[], month: number, year: n
     const nightTechs = filterEmps(['Técnicas de Enfermagem', 'Técnicas de Enfermagem - APH'], isNight);
 
     // --- HEADER ---
-    children.push(...createPageHeader(fullDate, dayOfWeek, sectorName, titleText, logoBuffer));
+    // Pass displaySectorName here so the doc header shows the custom name
+    children.push(...createPageHeader(fullDate, dayOfWeek, displaySectorName, titleText, logoBuffer));
 
     // --- MORNING ---
     if (isUCA) {
         children.push(createUcaShiftTable("MANHÃ - ENFERMEIROS", colors.morning, colors.morningRow, mornNurses, mornTechs, minNurseRows, minTechRows));
         children.push(new Paragraph({ children: [ new TextRun({ text: "ENFERMEIRO RESPONSÁVEL PELA DISTRIBUIÇÃO- CARIMBO/ ASSINATURA: ______________________________________________________________", bold: true, font: FONT_FAMILY, size: 16 }) ], spacing: { before: 120, after: 20 } }));
     } else if (isCompact || isMultiPageNovo) {
+         // Pass original sectorName for structure logic, config for column names
          children.push(createUcincoTable("MANHÃ - ENFERMEIROS", colors.morning, mornNurses, mornTechs, shiftColWidths, minNurseRows, minTechRows, sectorName, config));
          children.push(new Paragraph({ children: [ new TextRun({ text: "ENFERMEIRO RESPONSÁVEL PELA DISTRIBUIÇÃO: ______________________________ CARIMBO/ASSINATURA", bold: true, font: FONT_FAMILY, size: 16 }) ], spacing: { before: 50, after: 50 } }));
     } else {
@@ -856,7 +865,8 @@ export const generateDocx = async (employees: Employee[], month: number, year: n
         children.push(new Paragraph({ children: [ new TextRun({ text: "ENFERMEIRO RESPONSÁVEL PELA DISTRIBUIÇÃO: ______________________________ CARIMBO/ASSINATURA", bold: true, font: FONT_FAMILY, size: 16 }) ], spacing: { before: 50, after: 0 } }));
     } else {
         children.push(new Paragraph({ children: [new PageBreak()], spacing: { before: 0, after: 0 } }));
-        children.push(...createPageHeader(fullDate, dayOfWeek, sectorName, titleText, logoBuffer));
+        // Page 2 Header with custom sector name
+        children.push(...createPageHeader(fullDate, dayOfWeek, displaySectorName, titleText, logoBuffer));
 
         if (isUCA) {
              children.push(createUcaShiftTable("NOITE - ENFERMEIROS", colors.night, colors.nightRow, nightNurses, nightTechs, minNurseRows, minTechRows));
@@ -889,5 +899,6 @@ export const generateDocx = async (employees: Employee[], month: number, year: n
   });
 
   const blob = await Packer.toBlob(doc);
-  saveAs(blob, `Livro_Plantao_${sectorName.replace(/\s+/g, '_')}_${MONTH_NAMES[month]}_${year}.docx`);
+  // Use displaySectorName for the filename as well
+  saveAs(blob, `Livro_Plantao_${displaySectorName.replace(/\s+/g, '_')}_${MONTH_NAMES[month]}_${year}.docx`);
 };
