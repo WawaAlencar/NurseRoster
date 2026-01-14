@@ -62,6 +62,7 @@ export const INITIAL_EMPLOYEES: string[] = [];
 export const DEFAULT_LAYOUT_CONFIG = {
   // Textos
   titleReport: 'DISTRIBUIÇÃO DIÁRIA DAS ATIVIDADES DE ENFERMAGEM',
+  customSectorName: 'NOME DO SETOR',
   col6Name: 'COLUNA 6',
   col7Name: 'COLUNA 7',
   
