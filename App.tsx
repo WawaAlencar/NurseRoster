@@ -1,10 +1,10 @@
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Plus, FileSpreadsheet, Eraser, FileText, LayoutGrid, Users } from 'lucide-react';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 
-import RosterTable from './RosterTable';
-import DocumentGenerator from './DocumentGenerator';
+import RosterTable from './components/RosterTable';
+import DocumentGenerator from './components/DocumentGenerator';
 import { Employee, ShiftType, EmployeeCategory } from './types';
 import { CATEGORIES, CATEGORY_THEMES, SHIFT_COLORS, INITIAL_ROWS_PER_CATEGORY, MONTH_NAMES } from './constants';
 
@@ -33,6 +33,9 @@ const CODE_LEGEND: Record<string, string> = {
 };
 
 const App: React.FC = () => {
+  // -- Splash Screen State --
+  const [showSplash, setShowSplash] = useState(true);
+
   // -- State --
   const [activeTab, setActiveTab] = useState<'roster' | 'generator'>('roster');
   
@@ -67,6 +70,17 @@ const App: React.FC = () => {
   });
   
   const [error, setError] = useState<string | null>(null);
+
+  // -- Effects --
+  
+  // Splash Screen Timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 1500); // 1.5 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // -- Handlers --
 
@@ -250,8 +264,34 @@ const App: React.FC = () => {
   // Generate simple year options (current -1 to current +5)
   const yearOptions = Array.from({ length: 7 }, (_, i) => new Date().getFullYear() - 1 + i);
 
+  // -- Render Splash Screen --
+  if (showSplash) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-lime-600 to-emerald-800 text-white animate-in fade-in duration-500">
+        <div className="relative">
+          {/* Glowing background effect behind logo */}
+          <div className="absolute inset-0 bg-white/20 blur-xl rounded-full scale-150"></div>
+          
+          <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border border-white/20 shadow-2xl relative z-10 transform transition-transform hover:scale-105 duration-700 animate-pulse">
+            <FileSpreadsheet size={80} strokeWidth={1.5} />
+          </div>
+        </div>
+        
+        <h1 className="text-5xl font-bold mt-8 mb-2 tracking-tight drop-shadow-md">NurseRoster</h1>
+        <p className="text-lime-100 text-lg font-light tracking-wide opacity-90">Gestão de Plantões Hospitalares</p>
+        
+        <div className="mt-12 flex items-center gap-2">
+          <div className="w-2.5 h-2.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full animate-bounce"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // -- Render Main App --
   return (
-    <div className="min-h-screen bg-gray-100 font-sans text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-gray-100 font-sans text-slate-800 flex flex-col animate-in slide-in-from-bottom-4 fade-in duration-700">
       
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-3 sticky top-0 z-50 flex flex-col xl:flex-row items-center justify-between gap-4 shadow-sm">
