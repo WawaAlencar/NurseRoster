@@ -3,8 +3,8 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Plus, FileSpreadsheet, Eraser, FileText, LayoutGrid, Users } from 'lucide-react';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 
-import RosterTable from './components/RosterTable';
-import DocumentGenerator from './components/DocumentGenerator';
+import RosterTable from './RosterTable';
+import DocumentGenerator from './DocumentGenerator';
 import { Employee, ShiftType, EmployeeCategory } from './types';
 import { CATEGORIES, CATEGORY_THEMES, SHIFT_COLORS, INITIAL_ROWS_PER_CATEGORY, MONTH_NAMES } from './constants';
 
