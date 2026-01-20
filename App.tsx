@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Plus, FileSpreadsheet, Eraser, FileText, LayoutGrid, Users } from 'lucide-react';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
@@ -70,13 +71,13 @@ const App: React.FC = () => {
   
   const [error, setError] = useState<string | null>(null);
 
-  // -- Effects --  
+  // -- Effects --
   
   // Splash Screen Timer
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 2000); // 2 seconds
+    }, 2000); // 2.0 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -124,7 +125,7 @@ const App: React.FC = () => {
   const handleUpdateShift = useCallback((employeeId: string, day: number, code: ShiftType) => {
     setEmployees(prev => prev.map(emp => {
       if (emp.id === employeeId) {
-        const newSchedule = { ...emp.schedule }; 
+        const newSchedule = { ...emp.schedule };
         if (code === ShiftType.OFF || code.trim() === '') {
           delete newSchedule[day];
         } else {
@@ -311,13 +312,15 @@ const App: React.FC = () => {
             <div className="flex bg-gray-100 p-1 rounded-lg shadow-inner">
                <button 
                  onClick={() => setActiveTab('roster')}
-                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${activeTab === 'roster' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 hover[...]">
+                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${activeTab === 'roster' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+               >
                  <LayoutGrid size={16} />
                  Edição da Escala
                </button>
                <button 
                  onClick={() => setActiveTab('generator')}
-                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${activeTab === 'generator' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 ho[...]">
+                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${activeTab === 'generator' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+               >
                  <FileText size={16} />
                  Gerador de Livro
                </button>
@@ -330,7 +333,7 @@ const App: React.FC = () => {
                 <select 
                     value={selectedMonth} 
                     onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                    className="bg-white border border-gray-300 text-gray-700 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block p-1.5 outline-none font-medium cursor-pointer hove[...]">
+                    className="bg-white border border-gray-300 text-gray-700 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block p-1.5 outline-none font-medium cursor-pointer hover:bg-gray-50"
                 >
                     {MONTH_NAMES.map((month, index) => (
                         <option key={month} value={index}>{month}</option>
@@ -339,7 +342,7 @@ const App: React.FC = () => {
                 <select 
                     value={selectedYear} 
                     onChange={(e) => setSelectedYear(Number(e.target.value))}
-                    className="bg-white border border-gray-300 text-gray-700 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block p-1.5 outline-none font-medium cursor-pointer hove[...]">
+                    className="bg-white border border-gray-300 text-gray-700 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block p-1.5 outline-none font-medium cursor-pointer hover:bg-gray-50"
                 >
                     {yearOptions.map(year => (
                         <option key={year} value={year}>{year}</option>
@@ -413,7 +416,7 @@ const App: React.FC = () => {
                               {/* Category Header */}
                               <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-50/50">
                                   <div className="flex items-center gap-3">
-                                      <div className={`p-2 rounded-lg ${theme.iconBg} ${theme.iconColor}`}> 
+                                      <div className={`p-2 rounded-lg ${theme.iconBg} ${theme.iconColor}`}>
                                           <Users size={20} />
                                       </div>
                                       <h2 className="text-lg font-bold text-gray-800">{category}</h2>
@@ -427,7 +430,7 @@ const App: React.FC = () => {
                                       <button 
                                           type="button"
                                           onClick={(e) => handleClearCategory(e, category)}
-                                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded border border-transparent hover:border-red-100 [...]"
+                                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded border border-transparent hover:border-red-100 transition-colors"
                                           title="Limpar nomes e plantões deste setor"
                                       >
                                           <Eraser size={14} />
@@ -436,7 +439,7 @@ const App: React.FC = () => {
                                       <button 
                                           type="button"
                                           onClick={(e) => handleAddEmptyRow(e, category)}
-                                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded transition-co[...]"
+                                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded transition-colors"
                                       >
                                           <Plus size={14} />
                                           Add Linha
